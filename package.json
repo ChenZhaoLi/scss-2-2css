@@ -1,8 +1,9 @@
 {
   "name": "scss-2-css",
   "displayName": "scss-2-css",
-  "description": "wu",
-  "version": "0.0.2",
+  "description": "将scss编译成css文件",
+  "version": "0.0.3",
+  "icon": "sass-logo.png",
   "publisher": "czl97",
   "engines": {
     "vscode": "^1.66.0"
