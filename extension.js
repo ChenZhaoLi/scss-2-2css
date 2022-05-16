@@ -1,7 +1,7 @@
 const vscode = require("vscode");
 const scss = require("sass");
 
-const lodash = require('lodash')
+const lodash = require("lodash");
 const fs = require("fs");
 const path = require("path");
 const postcss = require("postcss");
@@ -10,7 +10,7 @@ var pxtorem = require("postcss-pxtorem");
 
 const std = vscode.window.createOutputChannel("scss-2-css");
 
-const postcssInstance = postcss();
+let postcssInstance;
 const options = {
   compileOnSave: true,
   autoPrefixer: true,
@@ -22,9 +22,9 @@ const options = {
     indentWidth: 2,
     outputStyle: "compressed",
   },
-//   outputDir:'',
-//   exclude: "",
-//   workspace: "",
+  //   outputDir:'',
+  //   exclude: "",
+  //   workspace: "",
 };
 function render(file) {
   try {
@@ -66,7 +66,7 @@ class Compiler {
     }
     // let origin = doc.fileName || "";
     // 过滤不编译的文件
-	// ...
+    // ...
 
     // 开始编译
     this.compile(doc);
@@ -74,14 +74,15 @@ class Compiler {
 }
 
 function __init__() {
+  postcssInstance = postcss();
   let conf = vscode.workspace.getConfiguration("scss-2-css");
   let folders = vscode.workspace.workspaceFolders;
   // 工作区目录
   let wsDir = "";
   // .scssrc 配置文件
   let configFile = "";
-  if(conf){
-	lodash.merge(options, conf)
+  if (conf) {
+    lodash.merge(options, conf);
   }
 
   if (folders && folders.length) {
@@ -95,13 +96,13 @@ function __init__() {
   // 有配置文件时, 优先使用配置文件的配置
   if (fs.existsSync(configFile)) {
     let conf = JSON.parse(fs.readFileSync(configFile).toString());
-	lodash.merge(options, conf)
+    lodash.merge(options, conf);
   }
   if (options.autoPrefixer) {
     postcssInstance.use(autoprefixer);
   }
   if (options.autoTransformPx2Rem) {
-    postcssInstance.use(pxtorem);
+    postcssInstance.use(pxtorem(options.px2RemConfig));
   }
 }
 
